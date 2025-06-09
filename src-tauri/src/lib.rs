@@ -4,8 +4,6 @@ use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Manager, Runtime, State, Emitter,
 };
-use image::{ImageBuffer, Rgba, RgbaImage, ImageOutputFormat};
-use imageproc::drawing::draw_filled_circle_mut;
 
 #[cfg(target_os = "macos")]
 use cocoa::appkit::NSApp;
@@ -119,45 +117,6 @@ fn create_tray_menu<R: Runtime>(app: &tauri::AppHandle<R>) -> Result<Menu<R>, ta
     let quit_item = MenuItem::with_id(app, "quit", "退出", true, None::<&str>)?;
     
     Menu::with_items(app, &[&show_item, &increment_item, &clear_item, &quit_item])
-}
-
-fn create_icon_with_badge(count: u32) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
-    // 创建一个32x32的基础图标（简单的蓝色圆圈）
-    let mut img: RgbaImage = ImageBuffer::new(32, 32);
-    
-    // 填充透明背景
-    for pixel in img.pixels_mut() {
-        *pixel = Rgba([0, 0, 0, 0]);
-    }
-    
-    // 绘制基础图标（蓝色圆圈）
-    draw_filled_circle_mut(&mut img, (16, 16), 14, Rgba([70, 130, 180, 255]));
-    
-    if count > 0 {
-        // 绘制红色徽章
-        let badge_x = 22;
-        let badge_y = 6;
-        let badge_radius = if count > 99 { 8 } else if count > 9 { 7 } else { 6 };
-        
-        draw_filled_circle_mut(&mut img, (badge_x, badge_y), badge_radius, Rgba([255, 60, 60, 255]));
-        
-        // 添加数字文本（简化版本，实际应用中可能需要更复杂的字体渲染）
-        // 这里我们简化处理，只在徽章上画一个白点表示有未读
-        if count <= 9 {
-            // 小圆点表示个位数
-            draw_filled_circle_mut(&mut img, (badge_x, badge_y), 2, Rgba([255, 255, 255, 255]));
-        } else {
-            // 双点表示多位数
-            draw_filled_circle_mut(&mut img, (badge_x-2, badge_y), 1, Rgba([255, 255, 255, 255]));
-            draw_filled_circle_mut(&mut img, (badge_x+2, badge_y), 1, Rgba([255, 255, 255, 255]));
-        }
-    }
-    
-    // 将图像转换为PNG字节数组
-    let mut png_data = Vec::new();
-    img.write_to(&mut std::io::Cursor::new(&mut png_data), ImageOutputFormat::Png)?;
-    
-    Ok(png_data)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
