@@ -209,19 +209,25 @@ pub fn run() {
 
     // 使用 Builder 模式创建并配置 Tauri 应用
     tauri::Builder::default()
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         // 添加插件
         .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
             // 这个回调会在尝试启动第二个应用实例时触发
             // app: 应用程序的 AppHandle
             // _argv: 启动第二个实例时的命令行参数 (已添加下划线前缀表示有意未使用)
             // _cwd: 启动第二个实例时的当前工作目录 (已添加下划线前缀表示有意未使用)
-            
+
             // 例如，可以在这里显示主窗口并将其置于前台
             if let Some(window) = app.get_webview_window("main") {
                 window.show().unwrap();
                 window.set_focus().unwrap();
             }
         }))
+        .plugin(tauri_plugin_upload::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent, // macOS下使用LaunchAgent方式
+            None,                                               // 不指定额外的启动参数
+        ))
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_opener::init()) // 用于打开外部 URL
         .plugin(tauri_plugin_dialog::init()) // 用于显示文件对话框
