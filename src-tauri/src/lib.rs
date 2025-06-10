@@ -209,6 +209,7 @@ pub fn run() {
 
     // 使用 Builder 模式创建并配置 Tauri 应用
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         // 添加插件
         .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
