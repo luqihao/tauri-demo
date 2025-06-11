@@ -23,7 +23,7 @@ pub fn run() {
     // 配置插件
     let builder = app_config::configure_plugins(builder);
 
-    builder
+    let app = builder
         // 使用 manage 将状态添加到应用程序中，使其可在各命令间共享
         .manage(unread_count)
         .setup(app_config::setup_app)
@@ -37,8 +37,32 @@ pub fn run() {
             commands::clear_unread,     // 清除未读消息数
             device_id::get_device_info  // 获取设备信息
         ])
-        // 运行应用程序
-        .run(tauri::generate_context!())
-        // 如果应用程序运行失败，显示错误信息并终止程序
-        .expect("error while running tauri application");
+        // 构建应用程序
+        .build(tauri::generate_context!())
+        // 如果应用程序构建失败，显示错误信息并终止程序
+        .expect("error while building tauri application");
+
+    // 在 macOS 上设置 Dock 点击事件处理
+    #[cfg(target_os = "macos")]
+    {
+        let app_handle = app.handle().clone();
+        app.run(move |_app_handle, event| {
+            match event {
+                tauri::RunEvent::Reopen { has_visible_windows, .. } => {
+                    // 当用户点击 Dock 图标重新打开应用时触发
+                    if !has_visible_windows {
+                        // 如果没有可见窗口，显示主窗口
+                        crate::window::show_main_window(&app_handle);
+                    }
+                }
+                _ => {}
+            }
+        });
+    }
+
+    // 在非 macOS 平台上直接运行应用程序
+    #[cfg(not(target_os = "macos"))]
+    {
+        app.run(|_app_handle, _event| {});
+    }
 }

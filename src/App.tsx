@@ -10,6 +10,7 @@ import { ClipboardModule } from './modules/ClipboardModule'
 import { FileModule } from './modules/FileModule'
 import { GreetingModule } from './modules/GreetingModule'
 import { SystemInfoModule } from './modules/SystemInfoModule'
+import WinCtrl from './modules/WinCtrl'
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                 <div style={{ fontSize: '11px', opacity: '0.9', marginTop: '4px' }}>
                     💻 桌面应用 • 🔔 系统托盘 • ⌨️ 全局快捷键 • 📋 粘贴板 • 📁 文件操作 • 📝 日志记录
                 </div>
+                <WinCtrl />
             </div>
 
             {/* 功能网格布局 */}

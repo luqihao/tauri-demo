@@ -1,3 +1,46 @@
+/* 标题栏样式 - 用于自定义无边框窗口 */
+/* 注释掉自定义标题栏样式，使用系统透明标题栏 */
+/*
+.titlebar {
+    height: 30px;
+    background: #329ea3;
+    user-select: none;
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+*/
+
+.titlebar-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.titlebar-button:hover {
+    background: #5bbec3;
+}
+
+.titlebar-button img {
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
+}
+
+/* 为主内容区域添加顶部边距，适应透明标题栏 */
+main {
+    margin-top: 0px; /* 改为0，因为现在使用系统标题栏 */
+    box-sizing: border-box;
+}
+
 .logo.vite:hover {
     filter: drop-shadow(0 0 2em #747bff);
 }
@@ -12,7 +55,6 @@
     font-weight: 400;
 
     color: #0f0f0f;
-    background-color: #f6f6f6;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -113,4 +155,28 @@ button {
     button:active {
         background-color: #0f0f0f69;
     }
+}
+
+.titlebar {
+    height: 30px;
+    background: #329ea3;
+    user-select: none;
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.titlebar-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.titlebar-button:hover {
+    background: #5bbec3;
 }
