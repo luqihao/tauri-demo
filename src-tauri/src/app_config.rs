@@ -1,19 +1,17 @@
 use crate::{tray, window};
 
 /// 应用程序配置和初始化模块
-/// 
+///
 /// 负责应用程序的插件配置、事件处理器设置等
 
 /// 配置所有 Tauri 插件
-/// 
+///
 /// # 参数
 /// - `builder`: Tauri Builder 实例
-/// 
+///
 /// # 返回值
 /// - 配置好插件的 Builder 实例
-pub fn configure_plugins(
-    builder: tauri::Builder<tauri::Wry>,
-) -> tauri::Builder<tauri::Wry> {
+pub fn configure_plugins(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<tauri::Wry> {
     builder
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
@@ -30,20 +28,20 @@ pub fn configure_plugins(
         .plugin(tauri_plugin_upload::init())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent, // macOS下使用LaunchAgent方式
-            None, // 不指定额外的启动参数
+            None,                                               // 不指定额外的启动参数
         ))
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_opener::init()) // 用于打开外部 URL
         .plugin(tauri_plugin_dialog::init()) // 用于显示文件对话框
         .plugin(tauri_plugin_clipboard_manager::init()) // 用于粘贴板操作
-        
+        .plugin(tauri_plugin_os::init()) // 用于获取系统信息
 }
 
 /// 设置应用程序初始化逻辑
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用实例
-/// 
+///
 /// # 返回值
 /// - `Ok(())`: 初始化成功
 /// - `Err(Box<dyn std::error::Error>)`: 初始化失败
@@ -55,7 +53,7 @@ pub fn setup_app(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>>
 }
 
 /// 设置托盘图标事件处理器
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 /// - `event`: 托盘图标事件
@@ -64,7 +62,7 @@ pub fn handle_tray_event(app: &tauri::AppHandle, event: tauri::tray::TrayIconEve
 }
 
 /// 设置菜单事件处理器
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 /// - `event`: 菜单事件

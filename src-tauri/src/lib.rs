@@ -1,10 +1,11 @@
 // 模块声明
-mod unread_count;
-mod commands;
-mod tray;
-mod dock;
-mod window;
 mod app_config;
+mod commands;
+mod device_id;
+mod dock;
+mod tray;
+mod unread_count;
+mod window;
 
 // 重新导出主要模块
 pub use unread_count::UnreadCount;
@@ -15,8 +16,10 @@ pub fn run() {
     let unread_count = UnreadCount::new();
 
     // 使用 Builder 模式创建并配置 Tauri 应用
-    let builder = tauri::Builder::default();
-    
+    let builder = tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_http::init());
+
     // 配置插件
     let builder = app_config::configure_plugins(builder);
 
@@ -31,7 +34,8 @@ pub fn run() {
             commands::greet,            // 处理问候功能
             commands::increment_unread, // 增加未读消息数
             commands::get_unread_count, // 获取当前未读消息数
-            commands::clear_unread      // 清除未读消息数
+            commands::clear_unread,     // 清除未读消息数
+            device_id::get_device_info  // 获取设备信息
         ])
         // 运行应用程序
         .run(tauri::generate_context!())

@@ -3,14 +3,14 @@ use tauri::State;
 use crate::{tray, unread_count::UnreadCount};
 
 /// Tauri 命令处理模块
-/// 
+///
 /// 包含所有可从前端调用的 Tauri 命令函数
 
 /// 问候命令 - 示例命令
-/// 
+///
 /// # 参数
 /// - `name`: 要问候的名字
-/// 
+///
 /// # 返回值
 /// - 包含问候信息的字符串
 #[tauri::command]
@@ -21,11 +21,11 @@ pub fn greet(name: &str) -> String {
 }
 
 /// 增加未读数命令
-/// 
+///
 /// # 参数
 /// - `state`: 应用状态中的未读数管理器
 /// - `app`: Tauri 应用句柄
-/// 
+///
 /// # 返回值
 /// - `Ok(u32)`: 操作成功，返回新的未读数
 /// - `Err(String)`: 操作失败，返回错误信息
@@ -41,10 +41,10 @@ pub fn increment_unread(state: State<UnreadCount>, app: tauri::AppHandle) -> Res
 }
 
 /// 获取当前未读数命令
-/// 
+///
 /// # 参数
 /// - `state`: 应用状态中的未读数管理器
-/// 
+///
 /// # 返回值
 /// - `Ok(u32)`: 操作成功，返回当前未读数
 /// - `Err(String)`: 操作失败，返回错误信息
@@ -54,11 +54,11 @@ pub fn get_unread_count(state: State<UnreadCount>) -> Result<u32, String> {
 }
 
 /// 清除未读数命令
-/// 
+///
 /// # 参数
 /// - `state`: 应用状态中的未读数管理器
 /// - `app`: Tauri 应用句柄
-/// 
+///
 /// # 返回值
 /// - `Ok(u32)`: 操作成功，返回新的未读数（应该是0）
 /// - `Err(String)`: 操作失败，返回错误信息

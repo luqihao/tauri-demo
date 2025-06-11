@@ -7,15 +7,15 @@ use tauri::{
 use crate::{dock, unread_count::UnreadCount, window};
 
 /// 系统托盘管理模块
-/// 
+///
 /// 负责创建托盘图标、菜单，处理托盘事件，更新托盘显示等功能
 
 /// 更新托盘标题、提示和相关 UI 元素
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄引用
 /// - `count`: 未读消息数量
-/// 
+///
 /// # 返回值
 /// - `Ok(())`: 操作成功
 /// - `Err(String)`: 操作失败，包含错误信息
@@ -60,10 +60,10 @@ pub fn update_tray_title(app: &tauri::AppHandle, count: u32) -> Result<(), Strin
 }
 
 /// 创建托盘菜单
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄引用
-/// 
+///
 /// # 返回值
 /// - `Ok(Menu<R>)`: 创建成功，返回菜单对象
 /// - `Err(tauri::Error)`: 创建失败，返回错误
@@ -87,10 +87,10 @@ pub fn create_tray_menu<R: Runtime>(app: &tauri::AppHandle<R>) -> Result<Menu<R>
 }
 
 /// 创建系统托盘图标
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄引用
-/// 
+///
 /// # 返回值
 /// - `Ok(())`: 创建成功
 /// - `Err(tauri::Error)`: 创建失败
@@ -111,7 +111,7 @@ pub fn create_tray_icon(app: &tauri::AppHandle) -> Result<(), tauri::Error> {
 }
 
 /// 处理托盘图标点击事件
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 /// - `event`: 托盘图标事件
@@ -132,7 +132,7 @@ pub fn handle_tray_icon_event(app: &tauri::AppHandle, event: TrayIconEvent) {
 }
 
 /// 处理托盘菜单事件
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 /// - `event`: 菜单事件

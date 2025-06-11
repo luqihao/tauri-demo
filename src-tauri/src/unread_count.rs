@@ -17,7 +17,10 @@ impl UnreadCount {
 
     /// 获取当前未读数
     pub fn get(&self) -> Result<u32, String> {
-        self.count.lock().map(|count| *count).map_err(|e| e.to_string())
+        self.count
+            .lock()
+            .map(|count| *count)
+            .map_err(|e| e.to_string())
     }
 
     /// 设置未读数

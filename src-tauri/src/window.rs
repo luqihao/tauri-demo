@@ -1,15 +1,15 @@
 use tauri::Manager;
 
 /// 窗口管理相关功能模块
-/// 
+///
 /// 提供窗口显示、隐藏、标题更新等功能
 
 /// 更新窗口标题显示未读数
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 /// - `count`: 未读消息数量
-/// 
+///
 /// # 返回值
 /// - `Ok(())`: 操作成功
 /// - `Err(String)`: 操作失败，包含错误信息
@@ -30,7 +30,7 @@ pub fn update_window_title(app: &tauri::AppHandle, count: u32) -> Result<(), Str
 }
 
 /// 显示主窗口并设置焦点
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 pub fn show_main_window(app: &tauri::AppHandle) {
@@ -41,7 +41,7 @@ pub fn show_main_window(app: &tauri::AppHandle) {
 }
 
 /// 隐藏主窗口
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 pub fn hide_main_window(app: &tauri::AppHandle) {
@@ -51,7 +51,7 @@ pub fn hide_main_window(app: &tauri::AppHandle) {
 }
 
 /// 切换主窗口显示状态
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用句柄
 pub fn toggle_main_window(app: &tauri::AppHandle) {

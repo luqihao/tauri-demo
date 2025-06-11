@@ -1,5 +1,5 @@
 /// macOS Dock 徽章管理模块
-/// 
+///
 /// 此模块负责在 macOS 上设置和管理 Dock 图标的徽章显示
 
 #[cfg(target_os = "macos")]
@@ -12,7 +12,7 @@ use cocoa::foundation::NSString;
 use objc::{msg_send, sel, sel_impl};
 
 /// 设置 macOS Dock 徽章
-/// 
+///
 /// # 参数
 /// - `count`: 要显示的未读数，如果为 0 则清除徽章
 #[cfg(target_os = "macos")]

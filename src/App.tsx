@@ -8,8 +8,8 @@ import { SystemTrayModule } from './modules/SystemTrayModule'
 import { GlobalShortcutsModule } from './modules/GlobalShortcutsModule'
 import { ClipboardModule } from './modules/ClipboardModule'
 import { FileModule } from './modules/FileModule'
-import { NetworkModule } from './modules/NetworkModule'
 import { GreetingModule } from './modules/GreetingModule'
+import { SystemInfoModule } from './modules/SystemInfoModule'
 
 function App() {
     return (
@@ -59,11 +59,11 @@ function App() {
                 {/* 文件操作模块 */}
                 <FileModule />
 
-                {/* 网络请求模块 */}
-                <NetworkModule />
-
                 {/* 问候模块 */}
                 <GreetingModule />
+
+                {/* 系统信息模块 */}
+                <SystemInfoModule />
             </div>
 
             {/* Logo 区域 */}
