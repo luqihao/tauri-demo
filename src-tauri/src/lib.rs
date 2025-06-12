@@ -1,14 +1,14 @@
 // 模块声明
 // 在 Rust 中，模块系统用于组织代码
 // mod 关键字声明一个模块，这里声明的模块对应同名的 .rs 文件
-mod app_config;    // 应用程序配置和插件管理
-mod commands;      // Tauri 命令处理函数
-mod device_id;     // 设备标识信息获取
-mod dock;          // macOS Dock 徽章管理
-mod tray;          // 系统托盘管理
-mod unread_count;  // 未读消息数量状态管理
-mod utils;         // 通用工具函数
-mod window;        // 窗口管理功能
+mod app_config; // 应用程序配置和插件管理
+mod commands; // Tauri 命令处理函数
+mod device_id; // 设备标识信息获取
+mod dock; // macOS Dock 徽章管理
+mod tray; // 系统托盘管理
+mod unread_count; // 未读消息数量状态管理
+mod utils; // 通用工具函数
+mod window; // 窗口管理功能
 
 // 导入必要的 trait
 use tauri::Manager;
@@ -19,10 +19,10 @@ use tauri::Manager;
 pub use unread_count::UnreadCount;
 
 /// Tauri 应用程序的主入口函数
-/// 
+///
 /// 这个函数负责创建、配置和运行整个 Tauri 应用程序
 /// 它使用 Builder 模式来逐步构建应用程序的各个组件
-/// 
+///
 /// # 功能概述
 /// 1. 创建和管理应用程序状态（未读数管理）
 /// 2. 配置所有必要的 Tauri 插件

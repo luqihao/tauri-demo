@@ -303,6 +303,37 @@ const result = await logAPI.cleanupAllOldLogs(30) // 保留30天
 const uploadResult = await logAPI.uploadAllLogsByDate('2025-06-12', 'https://api.example.com/logs')
 ```
 
+### 15. 系统通知 API (`notificationAPI`)
+
+```typescript
+import { notificationAPI } from '@/jsBridge'
+
+// 检查通知权限
+const isGranted = await notificationAPI.isPermissionGranted()
+
+// 请求通知权限
+const permission = await notificationAPI.requestPermission()
+
+// 发送简单通知
+await notificationAPI.send('简单通知标题')
+
+// 发送详细通知
+await notificationAPI.send({
+    title: '通知标题',
+    body: '这是通知的详细内容，可以包含更多信息。',
+    icon: '/path/to/icon.png', // 可选图标
+    sound: 'default' // 可选声音
+})
+
+// 发送带完整配置的通知
+await notificationAPI.send({
+    title: '重要提醒',
+    body: '您有一条新消息需要查看',
+    icon: undefined, // 使用默认图标
+    sound: undefined // 使用默认声音
+})
+```
+
 ## 统一使用方式
 
 您也可以通过统一的 `desktopAPI` 对象访问所有功能：
@@ -318,6 +349,15 @@ await desktopAPI.window.minimize()
 const isMaximized = await desktopAPI.window.isMaximized()
 
 const result = await desktopAPI.core.invoke('my_command', { arg: 'value' })
+
+// 使用通知功能
+const hasPermission = await desktopAPI.notification.isPermissionGranted()
+if (hasPermission) {
+    await desktopAPI.notification.send({
+        title: '桌面应用通知',
+        body: '这是通过统一API发送的通知'
+    })
+}
 ```
 
 ## 迁移到 Electron

@@ -39,6 +39,7 @@ pub fn configure_plugins(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<
         .plugin(tauri_plugin_os::init()) // 用于获取系统信息
         .plugin(tauri_plugin_store::Builder::default().build()) // 用于本地存储
         .plugin(tauri_plugin_http::init()) // 用于 HTTP 请求
+        .plugin(tauri_plugin_notification::init()) // 用于系统通知
 }
 
 /// 设置应用程序初始化逻辑

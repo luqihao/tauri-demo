@@ -20,6 +20,7 @@ export * from './opener'
 export * from './fs'
 export * from './path'
 export * from './log'
+export * from './notification'
 
 // 导入所有 API 实现
 import { autostartAPI } from './autostart'
@@ -36,6 +37,7 @@ import { openerAPI } from './opener'
 import { fsAPI } from './fs'
 import { pathAPI } from './path'
 import { logAPI } from './log'
+import { notificationAPI } from './notification'
 
 /**
  * 统一的桌面应用 API 接口
@@ -56,6 +58,7 @@ export interface DesktopAPI {
     fs: typeof fsAPI
     path: typeof pathAPI
     log: typeof logAPI
+    notification: typeof notificationAPI
 }
 
 /**
@@ -99,7 +102,8 @@ export const desktopAPI: DesktopAPI = {
     opener: openerAPI,
     fs: fsAPI,
     path: pathAPI,
-    log: logAPI
+    log: logAPI,
+    notification: notificationAPI
 }
 
 // 为了向后兼容，也单独导出各个 API
@@ -117,5 +121,6 @@ export {
     openerAPI,
     fsAPI,
     pathAPI,
-    logAPI
+    logAPI,
+    notificationAPI
 }

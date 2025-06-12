@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 /// 设备信息结构体
-/// 
+///
 /// 这个结构体包含设备的唯一标识信息
 /// 使用 Serialize 和 Deserialize 特性使其可以与 JSON 互相转换
 /// 这样前端就可以直接接收和处理这些数据
@@ -12,7 +12,7 @@ pub struct DeviceInfo {
     /// 设备的 MAC 地址字符串表示
     /// MAC 地址是网络接口的硬件地址，通常是唯一的
     mac_address: String,
-    
+
     /// 基于主机名和 MAC 地址生成的设备唯一标识符
     /// 这是一个 UUID v5 格式的字符串，确保设备的唯一性
     device_id: String,
@@ -23,12 +23,12 @@ pub struct DeviceInfo {
 /// 这个函数会收集设备的硬件和系统信息来生成唯一的设备标识
 /// 它会获取 MAC 地址和主机名，然后基于这些信息生成一个 UUID v5
 /// 这种方法确保了设备标识的唯一性和一致性
-/// 
+///
 /// # 工作原理
 /// 1. 获取第一个网络接口的 MAC 地址
 /// 2. 获取系统主机名
 /// 3. 使用 UUID v5 算法基于 MAC 地址和主机名生成设备 ID
-/// 
+///
 /// # 返回值
 /// - `Ok(DeviceInfo)`: 成功获取设备信息
 /// - `Err(String)`: 获取失败，包含错误描述

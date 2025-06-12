@@ -148,7 +148,7 @@ pub fn handle_menu_event(app: &tauri::AppHandle, event: tauri::menu::MenuEvent) 
             // 处理"增加未读数 (+1)"菜单项
             // 获取应用程序状态中的 UnreadCount 实例
             let state = app.state::<UnreadCount>();
-            
+
             // 尝试增加未读数
             if let Ok(new_count) = state.increment() {
                 // 更新托盘标题等 UI 元素
@@ -160,7 +160,7 @@ pub fn handle_menu_event(app: &tauri::AppHandle, event: tauri::menu::MenuEvent) 
         "clear" => {
             // 处理"清除未读数"菜单项
             let state = app.state::<UnreadCount>();
-            
+
             // 尝试清除未读数
             if let Ok(_) = state.clear() {
                 // 更新 UI 元素显示无未读消息
