@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart'
+import { autostartAPI } from '../jsBridge'
 
 interface AutostartModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -11,12 +11,13 @@ export const AutostartModule: React.FC<AutostartModuleProps> = () => {
 
     useEffect(() => {
         // 获取自动启动状态（使用纯JavaScript API）
-        isEnabled()
-            .then(enabled => {
+        autostartAPI
+            .isEnabled()
+            .then((enabled: boolean) => {
                 setIsAutoStartEnabled(enabled)
                 console.log('自动启动状态:', enabled ? '已启用' : '已禁用')
             })
-            .catch(err => {
+            .catch((err: any) => {
                 console.error('检查自动启动状态失败:', err)
             })
     }, [])
@@ -27,12 +28,12 @@ export const AutostartModule: React.FC<AutostartModuleProps> = () => {
 
             if (isAutoStartEnabled) {
                 // 如果已启用，则禁用（使用纯JavaScript API）
-                await disable()
+                await autostartAPI.disable()
                 setIsAutoStartEnabled(false)
                 console.log('已禁用开机自启动')
             } else {
                 // 如果已禁用，则启用（使用纯JavaScript API）
-                await enable()
+                await autostartAPI.enable()
                 setIsAutoStartEnabled(true)
                 console.log('已启用开机自启动')
             }

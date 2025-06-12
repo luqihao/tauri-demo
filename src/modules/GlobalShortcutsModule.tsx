@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { register, unregister, isRegistered } from '@tauri-apps/plugin-global-shortcut'
-import { invoke } from '@tauri-apps/api/core'
+import { globalShortcutAPI, coreAPI } from '../jsBridge'
 
 // 全局快捷键类型定义
 interface Shortcut {
@@ -29,7 +28,7 @@ export const GlobalShortcutsModule: React.FC<GlobalShortcutsModuleProps> = () =>
             const updatedShortcuts = await Promise.all(
                 shortcuts.map(async shortcut => {
                     try {
-                        const registered = await isRegistered(shortcut.combination)
+                        const registered = await globalShortcutAPI.isRegistered(shortcut.combination)
                         return { ...shortcut, isRegistered: registered }
                     } catch (error) {
                         console.error(`检查快捷键 ${shortcut.combination} 状态失败:`, error)
@@ -45,7 +44,7 @@ export const GlobalShortcutsModule: React.FC<GlobalShortcutsModuleProps> = () =>
 
     async function registerShortcut(shortcutId: string, combination: string) {
         try {
-            await register(combination, async () => {
+            await globalShortcutAPI.register(combination, async () => {
                 console.log(`全局快捷键 ${combination} 被触发`)
 
                 // 根据快捷键ID执行不同操作
@@ -55,10 +54,10 @@ export const GlobalShortcutsModule: React.FC<GlobalShortcutsModuleProps> = () =>
                         console.log('触发显示/隐藏窗口')
                         break
                     case 'increment-unread':
-                        await invoke('increment_unread')
+                        await coreAPI.invoke('increment_unread')
                         break
                     case 'clear-unread':
-                        await invoke('clear_unread')
+                        await coreAPI.invoke('clear_unread')
                         break
                 }
             })
@@ -75,7 +74,7 @@ export const GlobalShortcutsModule: React.FC<GlobalShortcutsModuleProps> = () =>
 
     async function unregisterShortcut(combination: string) {
         try {
-            await unregister(combination)
+            await globalShortcutAPI.unregister(combination)
 
             // 更新快捷键注册状态
             setShortcuts(prev => prev.map(s => (s.combination === combination ? { ...s, isRegistered: false } : s)))

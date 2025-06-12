@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getCurrentWebviewWindow, WebviewWindow } from '@tauri-apps/api/webviewWindow'
-import { platform } from '@tauri-apps/plugin-os'
+import { windowAPI, osAPI } from '../jsBridge'
 
 /**
  * Windows 系统标题栏控制组件
@@ -20,13 +19,6 @@ import { platform } from '@tauri-apps/plugin-os'
  * - 提供最小化、最大化、智能关闭功能
  */
 
-/**
- * 获取当前窗口实例的辅助函数
- * 使用 getCurrentWebviewWindow() 而不是硬编码特定窗口
- * @returns 当前活动的 WebviewWindow 实例
- */
-const getCurrentWindow = (): WebviewWindow => getCurrentWebviewWindow()
-
 const WinCtrl: React.FC = () => {
     const [isWindows, setIsWindows] = useState(false)
     const [isMainWindow, setIsMainWindow] = useState(false)
@@ -35,11 +27,10 @@ const WinCtrl: React.FC = () => {
     useEffect(() => {
         // 检测当前平台是否为 Windows
         // 只有在 Windows 平台才显示自定义标题栏控制按钮
-        setIsWindows(platform() === 'windows')
+        setIsWindows(osAPI.getPlatform() === 'windows')
 
         // 检测并记录当前窗口信息
-        const currentWindow = getCurrentWindow()
-        const label = currentWindow.label
+        const label = windowAPI.getLabel()
         setWindowLabel(label)
         setIsMainWindow(label === 'main')
 
@@ -77,19 +68,18 @@ const WinCtrl: React.FC = () => {
      * 3. 用户体验更加符合预期
      */
     const handleCloseWindow = () => {
-        const currentWindow = getCurrentWindow()
-        const label = currentWindow.label
+        const label = windowAPI.getLabel()
 
         console.log(`关闭窗口请求 - 窗口标签: ${label}`)
 
         if (label === 'main') {
             // 主窗口使用隐藏，保持应用在系统托盘运行
             // 用户可以通过托盘图标重新显示主窗口
-            handleWindowOperation('隐藏主窗口到系统托盘', () => currentWindow.hide())
+            handleWindowOperation('隐藏主窗口到系统托盘', () => windowAPI.hide())
         } else {
             // 子窗口直接关闭，释放相关资源
             // 如：设置窗口、关于窗口、帮助窗口等
-            handleWindowOperation(`关闭子窗口 (${label})`, () => currentWindow.close())
+            handleWindowOperation(`关闭子窗口 (${label})`, () => windowAPI.close())
         }
     }
 
@@ -98,15 +88,24 @@ const WinCtrl: React.FC = () => {
      * 所有窗口类型都使用相同的最小化行为
      */
     const handleMinimizeWindow = () => {
-        handleWindowOperation('最小化窗口', () => getCurrentWindow().minimize())
+        handleWindowOperation('最小化窗口', () => windowAPI.minimize())
     }
 
     /**
      * 切换最大化状态处理函数
      * 在最大化和还原之间切换
      */
-    const handleToggleMaximize = () => {
-        handleWindowOperation('切换最大化状态', () => getCurrentWindow().toggleMaximize())
+    const handleToggleMaximize = async () => {
+        try {
+            const isMaximized = await windowAPI.isMaximized()
+            if (isMaximized) {
+                handleWindowOperation('还原窗口', () => windowAPI.unmaximize())
+            } else {
+                handleWindowOperation('最大化窗口', () => windowAPI.maximize())
+            }
+        } catch (error) {
+            console.error('切换窗口最大化状态失败:', error)
+        }
     }
 
     // 如果不是 Windows 平台，不渲染控制按钮

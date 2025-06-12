@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { openFeaturesWindow, openAboutWindow } from '../utils/windowManager'
+import { windowAPI } from '../jsBridge/window'
 import StateDemo from '../components/StateDemo'
 
 const Home = () => {
@@ -36,7 +36,7 @@ const Home = () => {
             <h2 style={{ marginTop: '30px' }}>新窗口打开</h2>
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <button
-                    onClick={openFeaturesWindow}
+                    onClick={windowAPI.openFeaturesWindow}
                     style={{
                         padding: '8px 16px',
                         background: '#4299e1',
@@ -49,7 +49,7 @@ const Home = () => {
                     在新窗口打开功能演示
                 </button>
                 <button
-                    onClick={openAboutWindow}
+                    onClick={windowAPI.openAboutWindow}
                     style={{
                         padding: '8px 16px',
                         background: '#ed64a6',

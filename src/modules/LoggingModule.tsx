@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { LogLevel, getLogDirectory, appLogger, httpLogger, cleanupAllOldLogs, uploadAllLogsByDate } from '../log'
+import {
+    LogLevel,
+    getLogDirectory,
+    appLogger,
+    httpLogger,
+    cleanupAllOldLogs,
+    uploadAllLogsByDate
+} from '../jsBridge/log'
 
 interface LoggingModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -190,7 +197,7 @@ export const LoggingModule: React.FC<LoggingModuleProps> = () => {
                 headers: {
                     Authorization: 'Bearer your-token' // 可以根据需要添加认证头
                 },
-                onProgress: progress => {
+                onProgress: (progress: number) => {
                     setUploadProgress(progress)
                 }
             })

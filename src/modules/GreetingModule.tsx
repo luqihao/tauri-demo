@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { invoke } from '@tauri-apps/api/core'
-import { openUrl } from '@tauri-apps/plugin-opener'
+import { coreAPI, openerAPI } from '../jsBridge'
 
 interface GreetingModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -12,12 +11,12 @@ export const GreetingModule: React.FC<GreetingModuleProps> = () => {
 
     async function greet() {
         // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-        setGreetMsg(await invoke('greet', { name }))
+        setGreetMsg(await coreAPI.invoke('greet', { name }))
     }
 
     async function openTauriDocs() {
         try {
-            await openUrl('https://v2.tauri.app/zh-cn/learn/')
+            await openerAPI.openUrl('https://v2.tauri.app/zh-cn/learn/')
             console.log('已打开Tauri文档')
         } catch (error) {
             console.error('打开URL失败:', error)

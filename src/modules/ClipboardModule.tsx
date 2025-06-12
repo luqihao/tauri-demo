@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
+import { clipboardAPI } from '../jsBridge'
 
 interface ClipboardModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -11,7 +11,7 @@ export const ClipboardModule: React.FC<ClipboardModuleProps> = () => {
 
     async function copyToClipboard() {
         try {
-            await writeText(textToCopy)
+            await clipboardAPI.writeText(textToCopy)
             console.log('文本已复制到粘贴板:', textToCopy)
             alert('文本已复制到粘贴板！')
         } catch (error) {
@@ -22,7 +22,7 @@ export const ClipboardModule: React.FC<ClipboardModuleProps> = () => {
 
     async function readFromClipboard() {
         try {
-            const text = await readText()
+            const text = await clipboardAPI.readText()
             setClipboardText(text || '')
             console.log('从粘贴板读取的文本:', text)
         } catch (error) {

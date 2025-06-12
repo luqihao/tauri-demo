@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-    platform,
-    arch,
-    version,
-    hostname,
-    family,
-    locale,
-    type Platform,
-    type Arch,
-    type Family
-} from '@tauri-apps/plugin-os'
-import { getVersion, getIdentifier } from '@tauri-apps/api/app'
-import { invoke } from '@tauri-apps/api/core'
+import { osAPI, appAPI, coreAPI, type Platform, type Arch, type Family } from '../jsBridge'
 import CryptoJS from 'crypto-js'
 
 interface SystemInfo {
@@ -42,13 +30,13 @@ export const SystemInfoModule: React.FC<SystemInfoModuleProps> = () => {
     // 生成设备标识和sign
     const generateSign = async (platformInfo: Platform, versionInfo: string | null) => {
         try {
-            const identifier = await getIdentifier()
+            const identifier = await appAPI.getIdentifier()
             console.log('应用标识符:', identifier)
             // 获取设备ID和MAC地址
-            const deviceInfo = await invoke<DeviceIdResponse>('get_device_info')
+            const deviceInfo = await coreAPI.invoke<DeviceIdResponse>('get_device_info')
 
             // 获取应用版本
-            const appVer = await getVersion()
+            const appVer = await appAPI.getVersion()
 
             // 构建签名数据
             const signData = {
@@ -90,29 +78,22 @@ export const SystemInfoModule: React.FC<SystemInfoModuleProps> = () => {
             setIsLoading(true)
             setError('')
 
-            // 使用 JavaScript API 直接获取系统信息
-            const [platformInfo, archInfo, versionInfo, hostnameInfo, familyInfo, localeInfo] = await Promise.all([
-                platform(),
-                arch(),
-                version(),
-                hostname(),
-                family(),
-                locale()
-            ])
+            // 使用 osAPI 获取系统信息
+            const systemInfo = await osAPI.getSystemInfo()
 
             // 基本系统信息
             const info: SystemInfo = {
-                platform: platformInfo,
-                arch: archInfo,
-                version: versionInfo,
-                hostname: hostnameInfo,
-                family: familyInfo,
-                locale: localeInfo
+                platform: systemInfo.platform,
+                arch: systemInfo.arch,
+                version: systemInfo.version,
+                hostname: systemInfo.hostname,
+                family: systemInfo.family,
+                locale: systemInfo.locale
             }
 
             // 生成设备标识和sign
             try {
-                const deviceInfo = await generateSign(platformInfo, versionInfo)
+                const deviceInfo = await generateSign(systemInfo.platform, systemInfo.version)
                 info.deviceId = deviceInfo.deviceId
                 info.macAddress = deviceInfo.macAddress
                 info.sign = deviceInfo.sign

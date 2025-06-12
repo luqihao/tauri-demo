@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import { open as openFileDialog, save } from '@tauri-apps/plugin-dialog'
-import { download } from '@tauri-apps/plugin-upload'
-import { revealItemInDir } from '@tauri-apps/plugin-opener'
-
-// 下载进度类型定义
-interface DownloadProgress {
-    progress: number
-    total?: number
-    transferSpeed?: number
-}
+import { fileAPI, type DownloadProgress } from '../jsBridge'
 
 interface FileModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -25,7 +16,7 @@ export const FileModule: React.FC<FileModuleProps> = () => {
 
     async function selectFile() {
         try {
-            const selected = await openFileDialog({
+            const selected = await fileAPI.openFileDialog({
                 multiple: false,
                 directory: false,
                 title: '选择一个文件'
@@ -51,7 +42,7 @@ export const FileModule: React.FC<FileModuleProps> = () => {
 
     async function selectDownloadPath() {
         try {
-            const filePath = await save({
+            const filePath = await fileAPI.saveFileDialog({
                 defaultPath: 'test.jpg'
             })
 
@@ -82,7 +73,7 @@ export const FileModule: React.FC<FileModuleProps> = () => {
 
             console.log('开始下载:', downloadUrl, '到', downloadPath)
 
-            await download(downloadUrl, downloadPath, progress => {
+            await fileAPI.downloadFile(downloadUrl, downloadPath, (progress: DownloadProgress) => {
                 console.log('下载进度:', progress)
                 setDownloadProgress({
                     progress: progress.progress || 0,
@@ -98,7 +89,7 @@ export const FileModule: React.FC<FileModuleProps> = () => {
             // 下载完成后打开文件所在的文件夹
             try {
                 // 使用revealItemInDir直接打开文件所在的位置，无需截取路径
-                await revealItemInDir(downloadPath)
+                await fileAPI.revealInFileManager(downloadPath)
                 console.log('已打开文件所在位置:', downloadPath)
             } catch (openError) {
                 console.error('打开文件夹失败:', openError)

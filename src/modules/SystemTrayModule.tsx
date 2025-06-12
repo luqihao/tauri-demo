@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { invoke } from '@tauri-apps/api/core'
-import { listen } from '@tauri-apps/api/event'
+import { coreAPI, eventAPI } from '../jsBridge'
 
 interface SystemTrayModuleProps {
     // 无需接收外部状态和回调，组件自己管理所有状态
@@ -11,23 +10,23 @@ export const SystemTrayModule: React.FC<SystemTrayModuleProps> = () => {
 
     useEffect(() => {
         // 获取初始未读数
-        invoke('get_unread_count').then(count => {
-            setUnreadCount(count as number)
+        coreAPI.invoke('get_unread_count').then((count: number) => {
+            setUnreadCount(count)
         })
 
         // 监听托盘菜单触发的未读数变化事件
-        const unlisten = listen('unread-count-changed', event => {
-            setUnreadCount(event.payload as number)
+        const unlisten = eventAPI.listen('unread-count-changed', (event: { payload: number }) => {
+            setUnreadCount(event.payload)
         })
 
         return () => {
-            unlisten.then(f => f())
+            unlisten.then((f: () => void) => f())
         }
     }, [])
 
     async function incrementUnread() {
         try {
-            const newCount = (await invoke('increment_unread')) as number
+            const newCount = (await coreAPI.invoke('increment_unread')) as number
             setUnreadCount(newCount)
         } catch (error) {
             console.error('增加未读数失败:', error)
@@ -37,7 +36,7 @@ export const SystemTrayModule: React.FC<SystemTrayModuleProps> = () => {
 
     async function clearUnread() {
         try {
-            const newCount = (await invoke('clear_unread')) as number
+            const newCount = (await coreAPI.invoke('clear_unread')) as number
             setUnreadCount(newCount)
         } catch (error) {
             console.error('清除未读数失败:', error)

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { storeAPI } from '../jsBridge'
 import { Store } from '@tauri-apps/plugin-store'
 
 interface StoreItem {
@@ -23,7 +24,7 @@ const StoreModule = () => {
     useEffect(() => {
         const initStore = async () => {
             try {
-                const storeInstance = await Store.load(currentStoreFile)
+                const storeInstance = await storeAPI.load(currentStoreFile)
                 setStore(storeInstance)
                 await loadAllItems()
             } catch (error) {
@@ -39,11 +40,11 @@ const StoreModule = () => {
 
         try {
             setIsLoading(true)
-            const allKeys = await store.keys()
+            const allKeys = await storeAPI.keys(store)
             const itemsData: StoreItem[] = []
 
             for (const key of allKeys) {
-                const value = await store.get(key)
+                const value = await storeAPI.get(store, key)
                 itemsData.push({
                     key,
                     value,
@@ -99,8 +100,8 @@ const StoreModule = () => {
                     break
             }
 
-            await store.set(newKey, parsedValue)
-            await store.save()
+            await storeAPI.set(store, newKey, parsedValue)
+            await storeAPI.save(store)
 
             setNewKey('')
             setNewValue('')
@@ -121,7 +122,7 @@ const StoreModule = () => {
         }
 
         try {
-            const value = await store.get(searchKey)
+            const value = await storeAPI.get(store, searchKey)
             setSearchResult(value)
             console.log(`获取值: ${searchKey} = ${JSON.stringify(value)}`)
         } catch (error) {
@@ -135,14 +136,14 @@ const StoreModule = () => {
         if (!store) return
 
         try {
-            const exists = await store.has(key)
+            const exists = await storeAPI.has(store, key)
             if (!exists) {
                 alert('键不存在')
                 return
             }
 
-            await store.delete(key)
-            await store.save()
+            await storeAPI.delete(store, key)
+            await storeAPI.save(store)
             await loadAllItems()
 
             console.log(`删除成功: ${key}`)
@@ -160,8 +161,8 @@ const StoreModule = () => {
         }
 
         try {
-            await store.clear()
-            await store.save()
+            await storeAPI.clear(store)
+            await storeAPI.save(store)
             await loadAllItems()
             setSearchResult(null)
 
@@ -176,7 +177,7 @@ const StoreModule = () => {
         if (!store) return
 
         try {
-            const exists = await store.has(key)
+            const exists = await storeAPI.has(store, key)
             alert(`键 "${key}" ${exists ? '存在' : '不存在'}`)
         } catch (error) {
             console.error('检查键失败:', error)

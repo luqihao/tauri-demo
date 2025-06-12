@@ -1,6 +1,10 @@
-import { writeTextFile, exists, readTextFile, readDir, remove } from '@tauri-apps/plugin-fs'
-import { join, appDataDir } from '@tauri-apps/api/path'
-import { mkdir } from '@tauri-apps/plugin-fs'
+/**
+ * 日志系统抽象层
+ * 提供跨平台的日志记录和管理功能
+ */
+
+import { fsAPI } from './fs'
+import { pathAPI } from './path'
 
 export enum LogLevel {
     TRACE = 'TRACE',
@@ -40,13 +44,13 @@ class GlobalLogConfig {
 
         try {
             // 获取应用数据目录，例如：/Users/cnsusu/Library/Application Support/com.demo.app
-            const appDir = await appDataDir()
+            const appDir = await pathAPI.appDataDir()
 
             // 构建日志目录路径：/Users/cnsusu/Library/Application Support/com.demo.app/logs
-            const customLogDir = await join(appDir, 'logs')
+            const customLogDir = await pathAPI.join(appDir, 'logs')
 
             // 检查目录是否存在，不存在则创建
-            if (!(await exists(customLogDir))) {
+            if (!(await fsAPI.exists(customLogDir))) {
                 await this.createDirectoryRecursive(customLogDir)
                 console.log('创建日志目录:', customLogDir)
             }
@@ -66,7 +70,7 @@ class GlobalLogConfig {
      */
     private async createDirectoryRecursive(dirPath: string): Promise<void> {
         try {
-            await mkdir(dirPath, { recursive: true })
+            await fsAPI.mkdir(dirPath, { recursive: true })
         } catch (error) {
             console.error('创建目录失败:', error)
             throw error
@@ -126,7 +130,7 @@ export class LogManager {
         const config = await this.globalConfig.getConfig()
         const dateStr = this.formatDate(date)
         const filename = `${dateStr}.${this.logType}.log`
-        return await join(config.logDir, filename)
+        return await pathAPI.join(config.logDir, filename)
     }
 
     /**
@@ -138,8 +142,8 @@ export class LogManager {
 
         // 检查基础文件是否存在且是否超过大小限制
         try {
-            if (await exists(baseFilePath)) {
-                const content = await readTextFile(baseFilePath)
+            if (await fsAPI.exists(baseFilePath)) {
+                const content = await fsAPI.readTextFile(baseFilePath)
                 const sizeInBytes = new TextEncoder().encode(content).length
 
                 if (sizeInBytes < config.maxFileSize) {
@@ -159,8 +163,8 @@ export class LogManager {
             const numberedFilePath = `${baseFilePath}.${counter}`
 
             try {
-                if (await exists(numberedFilePath)) {
-                    const content = await readTextFile(numberedFilePath)
+                if (await fsAPI.exists(numberedFilePath)) {
+                    const content = await fsAPI.readTextFile(numberedFilePath)
                     const sizeInBytes = new TextEncoder().encode(content).length
 
                     if (sizeInBytes < config.maxFileSize) {
@@ -230,11 +234,11 @@ export class LogManager {
 
             try {
                 // 尝试追加到现有文件
-                const existingContent = (await exists(filePath)) ? await readTextFile(filePath) : ''
-                await writeTextFile(filePath, existingContent + logEntry)
+                const existingContent = (await fsAPI.exists(filePath)) ? await fsAPI.readTextFile(filePath) : ''
+                await fsAPI.writeTextFile(filePath, existingContent + logEntry)
             } catch (error) {
                 // 如果追加失败，尝试创建新文件
-                await writeTextFile(filePath, logEntry)
+                await fsAPI.writeTextFile(filePath, logEntry)
             }
 
             console.log(`${level} 日志已写入 [${this.logType}]: ${filePath}`)
@@ -287,10 +291,10 @@ export class LogManager {
 
         const config = await this.globalConfig.getConfig()
         const files: string[] = []
-        const basePath = await join(config.logDir, baseFilename)
+        const basePath = await pathAPI.join(config.logDir, baseFilename)
 
         // 检查基础文件
-        if (await exists(basePath)) {
+        if (await fsAPI.exists(basePath)) {
             files.push(basePath)
         }
 
@@ -299,7 +303,7 @@ export class LogManager {
         while (counter <= 100) {
             // 最多检查100个文件
             const numberedPath = `${basePath}.${counter}`
-            if (await exists(numberedPath)) {
+            if (await fsAPI.exists(numberedPath)) {
                 files.push(numberedPath)
                 counter++
             } else {
@@ -315,7 +319,7 @@ export class LogManager {
      */
     async readLogFile(filePath: string): Promise<string> {
         try {
-            return await readTextFile(filePath)
+            return await fsAPI.readTextFile(filePath)
         } catch (error) {
             console.error('读取日志文件失败:', error)
             throw error
@@ -343,13 +347,13 @@ export const cleanupAllOldLogs = async (
         const logDir = config.logDir
 
         // 确保日志目录存在
-        if (!(await exists(logDir))) {
+        if (!(await fsAPI.exists(logDir))) {
             console.log('日志目录不存在，无需清理')
             return { deletedFiles, errorFiles }
         }
 
         // 读取日志目录中的所有文件
-        const dirEntries = await readDir(logDir)
+        const dirEntries = await fsAPI.readDir(logDir)
 
         // 计算截止日期
         const cutoffDate = new Date()
@@ -361,7 +365,7 @@ export const cleanupAllOldLogs = async (
             if (!entry.isFile) continue
 
             const fileName = entry.name
-            const fullPath = await join(logDir, fileName)
+            const fullPath = await pathAPI.join(logDir, fileName)
 
             try {
                 // 检查是否是日志文件（匹配格式：YYYY-MM-DD.*.log 或 YYYY-MM-DD.*.log.数字）
@@ -374,7 +378,7 @@ export const cleanupAllOldLogs = async (
 
                     // 如果文件日期早于截止日期，则删除
                     if (fileDate < cutoffDate) {
-                        await remove(fullPath)
+                        await fsAPI.remove(fullPath)
                         deletedFiles.push(fullPath)
                         console.log(`已删除旧日志文件: ${fileName} (${fileDateStr})`)
                     }
@@ -415,7 +419,7 @@ export const uploadAllLogsByDate = async (
         const logDir = config.logDir
 
         // 确保日志目录存在
-        if (!(await exists(logDir))) {
+        if (!(await fsAPI.exists(logDir))) {
             console.log('日志目录不存在')
             return { success: true, uploadedFiles: [], failedFiles: [], totalSize: 0 }
         }
@@ -429,7 +433,7 @@ export const uploadAllLogsByDate = async (
         console.log(`开始上传 ${dateStr} 的所有日志文件...`)
 
         // 读取日志目录中的所有文件
-        const dirEntries = await readDir(logDir)
+        const dirEntries = await fsAPI.readDir(logDir)
         const logFiles: string[] = []
 
         for (const entry of dirEntries) {
@@ -441,7 +445,7 @@ export const uploadAllLogsByDate = async (
             const logFilePattern = new RegExp(`^${dateStr}\\..*\\.log(\\.\\d+)?$`)
 
             if (logFilePattern.test(fileName)) {
-                const fullPath = await join(logDir, fileName)
+                const fullPath = await pathAPI.join(logDir, fileName)
                 logFiles.push(fullPath)
             }
         }
@@ -455,8 +459,8 @@ export const uploadAllLogsByDate = async (
         logFiles.sort()
 
         // 创建临时副本目录
-        const tempDir = await join(logDir, `temp_upload_${Date.now()}`)
-        await mkdir(tempDir, { recursive: true })
+        const tempDir = await pathAPI.join(logDir, `temp_upload_${Date.now()}`)
+        await fsAPI.mkdir(tempDir, { recursive: true })
 
         try {
             // 复制文件到临时目录
@@ -464,11 +468,11 @@ export const uploadAllLogsByDate = async (
             for (const filePath of logFiles) {
                 try {
                     const fileName = filePath.split('/').pop() || ''
-                    const tempFilePath = await join(tempDir, fileName)
+                    const tempFilePath = await pathAPI.join(tempDir, fileName)
 
                     // 读取原文件内容并写入临时文件
-                    const content = await readTextFile(filePath)
-                    await writeTextFile(tempFilePath, content)
+                    const content = await fsAPI.readTextFile(filePath)
+                    await fsAPI.writeTextFile(tempFilePath, content)
 
                     copiedFiles.push(tempFilePath)
                     console.log(`已创建文件副本: ${fileName}`)
@@ -485,7 +489,7 @@ export const uploadAllLogsByDate = async (
 
             for (const tempFilePath of copiedFiles) {
                 try {
-                    const content = await readTextFile(tempFilePath)
+                    const content = await fsAPI.readTextFile(tempFilePath)
                     const size = new TextEncoder().encode(content).length
                     const fileName = tempFilePath.split('/').pop() || ''
 
@@ -571,14 +575,14 @@ export const uploadAllLogsByDate = async (
         } finally {
             // 清理临时目录
             try {
-                const tempEntries = await readDir(tempDir)
+                const tempEntries = await fsAPI.readDir(tempDir)
                 for (const entry of tempEntries) {
                     if (entry.isFile) {
-                        const tempFilePath = await join(tempDir, entry.name)
-                        await remove(tempFilePath)
+                        const tempFilePath = await pathAPI.join(tempDir, entry.name)
+                        await fsAPI.remove(tempFilePath)
                     }
                 }
-                await remove(tempDir)
+                await fsAPI.remove(tempDir)
                 console.log('已清理临时文件')
             } catch (error) {
                 console.warn('清理临时文件失败:', error)
@@ -603,4 +607,18 @@ const formatBytes = (bytes: number): string => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+/**
+ * 统一的日志系统 API
+ */
+export const logAPI = {
+    LogLevel,
+    LogManager,
+    appLogger,
+    httpLogger,
+    getLogDirectory,
+    cleanupAllOldLogs,
+    uploadAllLogsByDate,
+    formatBytes
 }
