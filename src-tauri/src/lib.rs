@@ -16,11 +16,9 @@ pub fn run() {
     let unread_count = UnreadCount::new();
 
     // 使用 Builder 模式创建并配置 Tauri 应用
-    let builder = tauri::Builder::default()
-        .plugin(tauri_plugin_os::init())
-        .plugin(tauri_plugin_http::init());
+    let builder = tauri::Builder::default();
 
-    // 配置插件
+    // 配置所有插件
     let builder = app_config::configure_plugins(builder);
 
     let app = builder
@@ -48,7 +46,10 @@ pub fn run() {
         let app_handle = app.handle().clone();
         app.run(move |_app_handle, event| {
             match event {
-                tauri::RunEvent::Reopen { has_visible_windows, .. } => {
+                tauri::RunEvent::Reopen {
+                    has_visible_windows,
+                    ..
+                } => {
                     // 当用户点击 Dock 图标重新打开应用时触发
                     if !has_visible_windows {
                         // 如果没有可见窗口，显示主窗口

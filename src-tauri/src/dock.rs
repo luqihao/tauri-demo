@@ -47,7 +47,7 @@ pub fn set_dock_badge(_count: u32) {
 /// 设置 macOS Dock 点击事件处理
 ///
 /// 在 Tauri 应用设置中注册回调，当用户点击 Dock 图标时显示主窗口
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用实例
 #[cfg(target_os = "macos")]

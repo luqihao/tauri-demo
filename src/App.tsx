@@ -10,6 +10,7 @@ import { ClipboardModule } from './modules/ClipboardModule'
 import { FileModule } from './modules/FileModule'
 import { GreetingModule } from './modules/GreetingModule'
 import { SystemInfoModule } from './modules/SystemInfoModule'
+import StoreModule from './modules/StoreModule'
 import WinCtrl from './modules/WinCtrl'
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
             >
                 <h1 style={{ margin: '0', fontSize: '18px', fontWeight: '600' }}>Tauri 功能演示</h1>
                 <div style={{ fontSize: '11px', opacity: '0.9', marginTop: '4px' }}>
-                    💻 桌面应用 • 🔔 系统托盘 • ⌨️ 全局快捷键 • 📋 粘贴板 • 📁 文件操作 • 📝 日志记录
+                    💻 桌面应用 • 🔔 系统托盘 • ⌨️ 全局快捷键 • 📋 粘贴板 • 📁 文件操作 • 📝 日志记录 • 💾 本地存储
                 </div>
                 <WinCtrl />
             </div>
@@ -66,6 +67,9 @@ function App() {
 
                 {/* 系统信息模块 */}
                 <SystemInfoModule />
+
+                {/* 本地存储模块 */}
+                <StoreModule />
             </div>
 
             {/* Logo 区域 */}

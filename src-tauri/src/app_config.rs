@@ -36,6 +36,8 @@ pub fn configure_plugins(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<
         .plugin(tauri_plugin_dialog::init()) // 用于显示文件对话框
         .plugin(tauri_plugin_clipboard_manager::init()) // 用于粘贴板操作
         .plugin(tauri_plugin_os::init()) // 用于获取系统信息
+        .plugin(tauri_plugin_store::Builder::default().build()) // 用于本地存储
+        .plugin(tauri_plugin_http::init()) // 用于 HTTP 请求
 }
 
 /// 设置应用程序初始化逻辑
@@ -49,7 +51,7 @@ pub fn configure_plugins(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<
 pub fn setup_app(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     // 创建系统托盘图标
     tray::create_tray_icon(app.handle())?;
-    
+
     // 设置 macOS Dock 点击事件处理
     #[cfg(target_os = "macos")]
     dock::setup_dock_event_handler(app)?;
@@ -79,7 +81,7 @@ pub fn handle_menu_event(app: &tauri::AppHandle, event: tauri::menu::MenuEvent) 
 }
 
 /// 设置窗口事件监听
-/// 
+///
 /// # 参数
 /// - `app`: Tauri 应用实例
 fn setup_window_events(app: &tauri::App) {
@@ -87,7 +89,7 @@ fn setup_window_events(app: &tauri::App) {
     if let Some(window) = app.get_webview_window("main") {
         // 克隆 app_handle 以便在闭包中使用
         let app_handle = app.handle().clone();
-        
+
         // 监听窗口关闭请求事件
         // 当用户通过窗口控件或快捷键尝试关闭窗口时触发
         let _ = window.on_window_event(move |event| {
@@ -96,10 +98,10 @@ fn setup_window_events(app: &tauri::App) {
                 tauri::WindowEvent::CloseRequested { api, .. } => {
                     // 阻止窗口真正关闭
                     api.prevent_close();
-                    
+
                     // 只隐藏窗口，而不是真正关闭它
                     window::hide_main_window(&app_handle);
-                },
+                }
                 _ => {}
             }
         });
