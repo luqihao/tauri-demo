@@ -2,7 +2,7 @@
     "$schema": "../gen/schemas/desktop-schema.json",
     "identifier": "default",
     "description": "Capability for the main window",
-    "windows": ["main"],
+    "windows": ["main", "features-window", "about-window"],
     "permissions": [
         "core:default",
         "core:window:default",
@@ -51,6 +51,11 @@
         "store:allow-get",
         "store:allow-set",
         "store:allow-save",
-        "store:allow-load"
+        "store:allow-load",
+        "core:webview:default",
+        "core:webview:allow-create-webview-window",
+        "core:webview:allow-get-all-webviews",
+        "core:webview:allow-webview-position",
+        "core:webview:allow-webview-size"
     ]
 }

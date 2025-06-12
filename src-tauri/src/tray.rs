@@ -1,7 +1,7 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-    Emitter, Manager, Runtime,
+    Manager, Runtime,
 };
 
 use crate::{dock, unread_count::UnreadCount, window};
@@ -145,25 +145,28 @@ pub fn handle_menu_event(app: &tauri::AppHandle, event: tauri::menu::MenuEvent) 
             window::show_main_window(app);
         }
         "increment" => {
-            // 增加未读数
+            // 处理"增加未读数 (+1)"菜单项
             // 获取应用程序状态中的 UnreadCount 实例
             let state = app.state::<UnreadCount>();
+            
+            // 尝试增加未读数
             if let Ok(new_count) = state.increment() {
                 // 更新托盘标题等 UI 元素
                 let _ = update_tray_title(app, new_count);
-                // 发出事件，通知前端计数已更改
-                // emit 方法发送一个名为 "unread-count-changed" 的事件，带有 new_count 作为有效负载
-                let _ = app.emit("unread-count-changed", new_count);
+                // 使用工具函数发送事件通知前端
+                let _ = crate::utils::emit_unread_count_changed(app, new_count);
             }
         }
         "clear" => {
-            // 清除未读数
+            // 处理"清除未读数"菜单项
             let state = app.state::<UnreadCount>();
+            
+            // 尝试清除未读数
             if let Ok(_) = state.clear() {
                 // 更新 UI 元素显示无未读消息
                 let _ = update_tray_title(app, 0);
-                // 发出事件通知前端
-                let _ = app.emit("unread-count-changed", 0);
+                // 使用工具函数发出事件通知前端未读数已清零
+                let _ = crate::utils::emit_unread_count_changed(app, 0);
             }
         }
         "quit" => {
