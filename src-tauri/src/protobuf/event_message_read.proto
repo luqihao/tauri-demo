@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message EventMessageRead {
+    uint64 from_id = 1;		//读消息的人是谁
+    uint64 to_id = 2;		//聊天对象是谁
+    bool is_room = 3;		//toId 是群吗
+    uint64 msg_id = 4;		//消息id，小于等于该id的都是已读，会话未读数量减少
+}

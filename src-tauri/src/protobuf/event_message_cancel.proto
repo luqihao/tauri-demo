@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pb;
+
+message EventMessageCancel {
+	uint64 from_id = 1;		//撤回消息的人是谁
+	uint64 to_id = 2;		//聊天对象是谁
+	bool is_room = 3;		//toId 是群吗
+	uint64 msg_id = 4;		//撤回的消息id
+	uint32 type = 5;		//0:单条（默认兼容以前）1:批量撤回
+	repeated uint64 msg_ids = 6;
+}

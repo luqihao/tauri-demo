@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pb;
+
+message EventCsServiceChange {
+  uint64 cs_user_id = 1;// 当前客服用户id
+  repeated uint64 user_ids = 2;// 客户用户id列表
+  CsServiceChange type = 3; // 变化类型
+  bool is_transfer = 4; // 是否转接
+}
+
+enum CsServiceChange {
+  None = 0;
+  Serving = 1;// 接入服务
+  Over = 2;// 结束服务
+}

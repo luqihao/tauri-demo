@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+// 公共事件
+message EventCommon {
+  int32 type = 1;     // 事件类型：1 删除系统公告 2语音播报 3ding已读
+  string data = 2;    // 事件内容，json结构，示例：{"notice_id": 100}
+}

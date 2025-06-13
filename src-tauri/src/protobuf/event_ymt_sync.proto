@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+message EventYmtSync {
+  uint64 account_id = 1; //爬取哪个账号的数据
+  uint64 platform_id = 2; //平台id
+  string uid = 3; //账号唯一str id
+  string cookie = 4; //账号cookie
+  string username = 5; //账号昵称
+}

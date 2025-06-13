@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+// 设备退出登录
+message Logout {
+    string message = 1;       //退出登录原因
+}

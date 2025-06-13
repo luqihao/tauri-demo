@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+// 抢红包事件
+message EventRedpackOpen {
+    uint64 from_id = 1;		//抢红包的人是谁
+    uint64 to_id = 2;		//to_id 和 is_room 定位会话
+    bool is_room = 3;		//to_id 和 is_room 定位会话
+    uint64 msg_id = 4;		//msg_id定位消息
+    uint64 value = 5;		//服务端返回的红包金额；当客户端请求时，需要在此字段填入用户的支付宝id
+    uint64 owner_id = 6;	//额外新增字段，红包是谁发的
+}

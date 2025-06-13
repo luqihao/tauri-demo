@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message MessageSkinAnalysisReport  {
+  string uid = 1;     //uid
+  string url = 2;     //图片url
+  string title = 3;     //标题
+  uint64 problems_num = 4;//皮肤问题数
+}

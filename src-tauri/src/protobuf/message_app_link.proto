@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message MessageAppLink {
+    string cover_url = 1; //封面url
+    string app_url = 2; //app url
+    string title = 3; //标题
+    string sub_title = 4; //副标题
+}

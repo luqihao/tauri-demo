@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pb;
+
+// 消息发送
+message MessageSend {
+    int32 type = 1;     // 消息类型，1：文字
+    string content = 2; // 消息内容
+    uint64 to_id = 3;    // 用户id或者群组id
+    bool is_room = 4;  // 接收者类型
+    string meta = 5; 	//额外信息map 可解析的json字符串
+}
+
+// 消息发送回执
+message MessageSendACK {
+    uint64 msg_id = 1;   // 服务器消息id
+    string err_msg = 2; // 错误原因
+}

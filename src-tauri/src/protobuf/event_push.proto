@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventPush {
+    int32 type = 1;     // 事件类型
+    uint64 event_id = 2; //事件id
+	bytes data = 3;		//事件内容
+}
+
+message EventPushACK {
+    uint64 event_id = 1;   // 服务器事件id
+}

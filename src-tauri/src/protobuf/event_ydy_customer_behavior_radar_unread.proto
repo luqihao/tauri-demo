@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventYdyCustomerBehaviorRadarUnread {
+  uint32 count = 1; // 未读数，累加
+  uint32 trace_staff_id = 2; // 员工id
+}

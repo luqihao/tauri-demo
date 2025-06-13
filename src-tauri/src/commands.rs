@@ -1,6 +1,7 @@
 use tauri::State;
 
-use crate::{tray, unread_count::UnreadCount};
+use crate::{tray, unread_count::UnreadCount, pb::*};
+use base64::{Engine as _, engine::general_purpose};
 
 /// Tauri 命令处理模块
 ///
@@ -80,4 +81,97 @@ pub fn clear_unread(state: State<UnreadCount>, app: tauri::AppHandle) -> Result<
     tray::update_tray_title(&app, new_count)?;
 
     Ok(new_count)
+}
+
+/// 创建事件消息的 protobuf 数据
+///
+/// # 参数
+/// - `event_type`: 事件类型
+/// - `data`: 事件数据（JSON 字符串）
+///
+/// # 返回值
+/// - 序列化后的字节数组（base64 编码）
+#[tauri::command]
+pub fn create_event_message(event_type: i32, data: String) -> Result<String, String> {
+    let event = EventCommon {
+        r#type: event_type,
+        data,
+    };
+    
+    let bytes = event.to_bytes();
+    Ok(general_purpose::STANDARD.encode(bytes))
+}
+
+/// 解析事件消息的 protobuf 数据
+///
+/// # 参数
+/// - `data`: base64 编码的字节数组
+///
+/// # 返回值
+/// - 解析后的事件对象（JSON 格式）
+#[tauri::command]
+pub fn parse_event_message(data: String) -> Result<serde_json::Value, String> {
+    let bytes = general_purpose::STANDARD.decode(data).map_err(|e| format!("Base64 decode error: {}", e))?;
+    let event = EventCommon::from_bytes(&bytes).map_err(|e| format!("Protobuf decode error: {}", e))?;
+    
+    let json = serde_json::json!({
+        "type": event.r#type,
+        "data": event.data
+    });
+    
+    Ok(json)
+}
+
+/// 创建消息发送的 protobuf 数据
+///
+/// # 参数
+/// - `msg_type`: 消息类型
+/// - `content`: 消息内容
+/// - `to_id`: 接收者 ID
+/// - `is_room`: 是否为群组消息
+/// - `meta`: 元数据（可选）
+///
+/// # 返回值
+/// - 序列化后的字节数组（base64 编码）
+#[tauri::command]
+pub fn create_message_send(
+    msg_type: i32,
+    content: String,
+    to_id: u64,
+    is_room: bool,
+    meta: Option<String>,
+) -> Result<String, String> {
+    let message = MessageSend {
+        r#type: msg_type,
+        content,
+        to_id,
+        is_room,
+        meta: meta.unwrap_or_default(),
+    };
+    
+    let bytes = message.to_bytes();
+    Ok(general_purpose::STANDARD.encode(bytes))
+}
+
+/// 解析消息发送的 protobuf 数据
+///
+/// # 参数
+/// - `data`: base64 编码的字节数组
+///
+/// # 返回值
+/// - 解析后的消息对象（JSON 格式）
+#[tauri::command]
+pub fn parse_message_send(data: String) -> Result<serde_json::Value, String> {
+    let bytes = general_purpose::STANDARD.decode(data).map_err(|e| format!("Base64 decode error: {}", e))?;
+    let message = MessageSend::from_bytes(&bytes).map_err(|e| format!("Protobuf decode error: {}", e))?;
+    
+    let json = serde_json::json!({
+        "type": message.r#type,
+        "content": message.content,
+        "to_id": message.to_id,
+        "is_room": message.is_room,
+        "meta": message.meta
+    });
+    
+    Ok(json)
 }

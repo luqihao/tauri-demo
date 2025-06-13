@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventChatroomInfoUpdate {
+    uint64 chatroom_id = 1;			//群聊id
+    string avatar = 2;		        //变更后的群上传头像
+    string avatar_default = 3;		//变更后的群默认头像
+    bool  permit_required = 4;      //群验证开关
+    string  permit_notice = 5;      //群验证信息
+    string  desc = 6;      //群简介
+    bool inviteable = 7; // 是否开启仅群主和管理才可以邀请进群
+}

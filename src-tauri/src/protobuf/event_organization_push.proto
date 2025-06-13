@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pb;
+
+message EventOrganizationStatus {
+    uint64 user_id = 1; //userId
+    bool is_online = 2; //是否在线
+}
+// 消息发送
+message EventOrganizationPush {
+    repeated EventOrganizationStatus event_organization_status = 1;
+}

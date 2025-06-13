@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventFriendCateUpdate {
+	uint64 cate_id = 1;				    //分组Id
+    string name = 2;	    //更新的分组名称
+}

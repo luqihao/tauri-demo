@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+message MessageRedpack {
+    string name = 1;		 //名字
+    bool equally = 2;		 //是否均分
+    uint32 amount = 3;		 //多少分
+    uint32 count = 4;		 //多少个
+    string ali_order_id = 5; //阿里订单id
+}

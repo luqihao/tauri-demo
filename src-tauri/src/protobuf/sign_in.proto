@@ -1,0 +1,19 @@
+syntax = "proto3";
+package pb;
+
+// 设备登录
+message SignIn {
+    string token = 1;       // 设备token
+    string sign = 2;        // 设备token
+    bool not_push = 3;	    //不推送离线
+    string app_version = 4; //app version
+}
+
+
+// 设备登录回执
+message SignInACK {
+    uint64 device_id = 1;
+    uint64 user_id = 2;
+    string message = 3; // 描述
+    int64 connect_time = 4;  // 连接时间
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+// 客户端未登录状态下通信
+message MessageUnauth {
+    string server_address = 1; // 服务器地址
+    string client_address = 2; // 客户端地址
+    string token = 3; //未登录状态下, 移动端允许 pc 登录会携带 token
+    int64 current_time = 4; // 当前服务器时间
+}

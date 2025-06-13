@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message MessageMemberLevelChange {
+	uint64 user_id = 1;				//变更的成员
+    uint32 level = 2;				//变更后的群成员权限等级
+}

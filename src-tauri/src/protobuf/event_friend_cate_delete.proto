@@ -1,0 +1,6 @@
+syntax = "proto3";
+package pb;
+
+message EventFriendCateDelete {
+	uint64 cate_id = 1;				 //分组Id
+}

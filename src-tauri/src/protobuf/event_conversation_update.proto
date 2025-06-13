@@ -1,0 +1,12 @@
+
+syntax = "proto3";
+package pb;
+
+message EventConversationUpdate {
+     uint64 target_id =1;     //会话id
+     bool is_room =2;         //是群吗?
+     bool is_delete=3;        //是删除吗?
+     bool is_to_top=4;        //是置顶吗?
+     int64 to_top_time=5;     //置顶时间
+     bool is_ignored=6;       //是忽略提醒吗?
+}

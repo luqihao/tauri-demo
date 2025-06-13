@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message MessageMemberChange {
+	repeated uint64 user_ids = 1;	//变更的成员
+	bool is_delete = 2;				//是进群还是退群
+    uint32 by_type = 3;				//进群或退群的方式
+    uint64 by_id = 4;				//谁邀请的？或者谁移除的？
+}

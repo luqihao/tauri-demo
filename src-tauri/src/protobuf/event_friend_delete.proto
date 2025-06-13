@@ -1,0 +1,6 @@
+syntax = "proto3";
+package pb;
+
+message EventFriendDelete {
+    repeated uint64 friend_ids = 1;		   //被删除的联系人Id
+}

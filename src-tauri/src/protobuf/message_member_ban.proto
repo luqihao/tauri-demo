@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message MessageMemberBan {
+	bool is_all = 1;				//是所有人？禁言的情况下管理员不受影响，要禁言管理员，请先解除管理员的职务
+	uint64 user_id = 2;				//被禁言的成员，在is_all=false的情况下有效
+	int64 duration = 3;				//禁言时长，毫秒，需要客户端传给后端, 等于0表示解除禁言
+	uint64 by_id = 4; 				//谁操作的
+}

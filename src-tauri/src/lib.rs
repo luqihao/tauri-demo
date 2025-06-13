@@ -5,9 +5,10 @@ mod app_config; // 应用程序配置和插件管理
 mod commands; // Tauri 命令处理函数
 mod device_id; // 设备标识信息获取
 mod dock; // macOS Dock 徽章管理
+mod pb; // Protobuf 消息处理
 mod tray; // 系统托盘管理
 mod unread_count; // 未读消息数量状态管理
-mod utils; // 通用工具函数
+pub mod utils; // 通用工具函数
 mod window; // 窗口管理功能
 
 // 导入必要的 trait
@@ -17,6 +18,7 @@ use tauri::Manager;
 // pub use 将模块中的类型重新导出，使其可以在库的根级别访问
 // 这样外部代码就可以直接使用 demo_lib::UnreadCount 而不是 demo_lib::unread_count::UnreadCount
 pub use unread_count::UnreadCount;
+pub use pb::*; // 导出所有 protobuf 类型
 
 /// Tauri 应用程序的主入口函数
 ///
@@ -60,7 +62,12 @@ pub fn run() {
             commands::increment_unread, // 增加未读消息数
             commands::get_unread_count, // 获取当前未读消息数
             commands::clear_unread,     // 清除未读消息数
-            device_id::get_device_info  // 获取设备信息
+            device_id::get_device_info, // 获取设备信息
+            // Protobuf 相关命令
+            commands::create_event_message,  // 创建事件消息
+            commands::parse_event_message,   // 解析事件消息
+            commands::create_message_send,   // 创建发送消息
+            commands::parse_message_send,    // 解析发送消息
         ])
         // 构建应用程序
         .build(tauri::generate_context!())

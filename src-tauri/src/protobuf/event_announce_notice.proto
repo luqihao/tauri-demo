@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventAnnounceNotice {
+  int32 type = 1; // 宣发类型
+  bool  isDialog = 2; // 是否弹窗提醒 true=弹框提醒
+}

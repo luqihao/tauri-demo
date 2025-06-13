@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+message EventAsr {
+    uint64 msg_id = 1; //消息id
+    uint64 to_id = 2; //聊天对象是谁
+    bool   is_room = 3; //toId 是群吗
+    string text = 4; //识别内容
+    string error = 5; //识别报错
+}

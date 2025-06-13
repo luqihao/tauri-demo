@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventYbsAppUnreadTotal {
+	uint32 total = 1; //总未读数
+    uint32 type = 2; //1:邮件数 2:直播数
+}

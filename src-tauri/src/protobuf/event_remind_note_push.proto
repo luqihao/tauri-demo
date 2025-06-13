@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message EventRemindNotePush{
+    uint64 note_id = 1;              //记事本记录ID
+    string uuid = 2;                 //uuid
+    string content = 3;			     //内容
+    int64 push_time = 4;			 //推送时间
+}

@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventFriendCateMove {
+	uint64 cate_id = 1;				    //分组Id
+    repeated uint64 friend_ids = 2;	    //移动的联系人Id
+}

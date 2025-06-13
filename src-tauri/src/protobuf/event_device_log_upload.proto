@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventDeviceLogUpload{
+    string log_date = 1;             //日志日期 格式:2020-02-02
+    string log_url = 2;			     //日志七牛地址
+}

@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message MessageCelebration {
+    string entity_name = 1;			            //单位
+    uint64 amount = 2;				            //金额
+    repeated string entity_names = 3;			//多单位
+}

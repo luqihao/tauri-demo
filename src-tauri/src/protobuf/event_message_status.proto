@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventMessageStatus {
+    uint64 msg_id = 1; //消息id
+    uint64 from_id = 2; //聊天对象是谁
+    uint64 to_id = 3; //聊天对象是谁
+    bool is_room = 4; //toId 是群吗
+    uint64 user_id = 5; //记录人
+    uint32 type = 6; //1:删消息 2:点赞 3:批量删消息 4:庄园已助力
+    repeated uint64 msg_ids = 7;
+}

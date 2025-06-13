@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message EventUnreadClear {
+    uint64 msg_id = 1;					//小于等于此消息id的都不计入提示红点数字，如果群id或用户id不为空，则只清除对应的会话；否则，则清除所有会话
+	uint64 chatroom_id = 2;   			//要清除的群聊会话id
+	uint64 user_id = 3;   				//要清除的私聊会话id
+}

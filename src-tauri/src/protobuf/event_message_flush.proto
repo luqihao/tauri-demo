@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message EventMessageFlush {
+    bool is_all = 1;					//是否清除全部, 如果是，则不用管下面两个数组了
+    repeated uint64 chatroom_ids = 2;   //要清除的群聊会话id数组
+    repeated uint64 user_ids = 3;   	//消息的私聊会话id数组
+}

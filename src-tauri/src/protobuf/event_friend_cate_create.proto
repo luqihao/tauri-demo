@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventFriendCateCreate {
+	uint64 cate_id = 1;				    //分组Id
+    string name = 2;	                //新建的分组名称
+    uint64 user_id = 3;
+    uint32 index = 4;
+    int64 created_at = 5;
+    int64 updated_at = 6;
+}
+

@@ -1,0 +1,6 @@
+syntax = "proto3";
+package pb;
+
+message EventDeviceCaptureUpload{
+    string capture_url = 1;			     //截图七牛地址
+}

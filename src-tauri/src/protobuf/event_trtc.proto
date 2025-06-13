@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventTrtc {
+     uint64 type = 1;
+     uint64 from_id = 2;
+     uint64 to_id = 3;
+     string text = 4;
+     string sig = 5; //签名
+     uint64 current_time = 6; //签名时间
+     uint64 room_id = 7; //房间号
+}

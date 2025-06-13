@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pb;
+
+message EventUserInfoUpdate {
+    uint64 id = 1;			//群id
+    string nickname = 2;	//昵称
+    string avatar = 3;		//头像
+    int32 gender= 4;		//性别
+    string sign = 5;		//状态
+    int64 created_at = 6;	//创建时间
+}

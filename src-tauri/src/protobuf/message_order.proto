@@ -1,0 +1,31 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+
+// 订单 35
+message MessageOrder {
+  string order_code = 1;// 订单号
+  uint64 order_id = 2;// 订单id
+  string status = 3; // 状态
+  string status_ex = 4; // 商城状态
+  float pay_amount = 5; // 支付金额
+  repeated MessageOrderLine lines = 6; // 订单明细
+  string creation_date = 7; // 创建日期
+  float ticket_amount = 8; // 优惠券金额
+  float prepaid_amount = 9;// 预付金额
+  float goods_acash = 10; // 实付金额
+  float goods_ascore = 11; // 实付积分
+}
+
+message MessageOrderLine {
+  uint64 goods_id = 1; // 商品id
+  string goods_name = 2; // 商品名称
+  string main_goods_id = 3; // 主商品id
+  string main_goods_name = 4; // 主商品名称
+  string img_name = 5; // 图片
+  float price = 6; // 价格
+  float score_price = 7; // 积分价格
+  float show_price = 8; // 展示价格
+  uint32 quantity = 9; // 数量
+}

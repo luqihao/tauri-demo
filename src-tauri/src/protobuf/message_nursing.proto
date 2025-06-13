@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message MessageNursing  {
+  uint64 id = 1;        //方案id
+  string title = 2;     //方案标题
+  string skin_data = 3; //肌肤问题
+}

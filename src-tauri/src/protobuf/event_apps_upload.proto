@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pb;
+
+//应用状态
+message AppStatus {
+	string name = 1;
+	bool installed = 2;
+	bool running = 3;
+	string process_name = 4; //下发到前端用
+	string image = 5; //前端上传拼多多用户的头像
+}
+
+//应用列表
+message EventAppsUpload{
+    repeated AppStatus apps = 1;
+}

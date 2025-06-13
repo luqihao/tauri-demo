@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pb;
+
+message MessageChatroomApply {
+    uint64 from_id = 1;			//申请者
+    uint64 to_id = 2;			//群id
+    uint32 by_type = 3;			//添加方式: 搜索添加，点击邀请，扫描二维码
+    uint64 by_id = 4;			//谁邀请的？等于0表示主动搜索添加
+    string message = 5;			//验证消息
+    uint64 handled_by = 6;		//谁处理了
+    bool is_accept = 7;			//是否通过，需要先判断是否处理
+    uint64 request_id = 8;		//请求事件的id
+}

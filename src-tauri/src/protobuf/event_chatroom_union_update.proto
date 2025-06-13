@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message EventChatroomUnionUpdate {
+     uint64 chatroom_id =1;    //群聊id
+     uint32 status =2;         //状态  1 开始  2 暂停 3 结束
+     uint32 follower_num=3;    //跟随群数量
+}

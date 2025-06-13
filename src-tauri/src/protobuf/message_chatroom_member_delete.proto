@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message MessageChatroomMemberDelete {
+    uint64 chatroom_id = 1;		        //群id
+    repeated uint64 user_ids = 2;	//主动退出或被移除的成员
+    uint32 by_type = 3;				//退群的方式,对应convention/进群退群方式
+    uint64 by_id = 4;				//主动退出的成员或者谁移除的？
+}

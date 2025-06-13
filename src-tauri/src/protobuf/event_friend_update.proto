@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "convention/protobuf/user_meta.proto";
+package pb;
+
+message EventFriendUpdate {
+	string remark = 1;				//备注
+    uint64 cate_id = 2;		        //分组Id
+    User user = 3;				//联系人信息
+    bool is_follow = 4; //1就是关注，0没有关注
+}

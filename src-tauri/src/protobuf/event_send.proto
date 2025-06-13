@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pb;
+
+message EventSend {
+    int32 type = 1;     // 事件类型
+	bytes data = 2;		//事件内容
+}
+
+message EventSendACK {
+    uint64 event_id = 1;   // 服务器事件id
+    string err_msg = 2; // 错误原因
+}

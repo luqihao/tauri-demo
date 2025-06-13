@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventOrganizationUpdate {
+    uint64 user_id = 1; //userId
+    bool is_online = 2; //是否在线 0:不在 1:在线
+}

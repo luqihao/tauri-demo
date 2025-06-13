@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pb;
+
+message MessagePkAchievementPoster {
+  int64 start_at = 1;// PK时间：起始时间13位时间戳
+  int64 end_at = 2;// PK时间：结束时间13位时间戳
+  uint32 method = 3;// PK维度：0总业绩，1新客户业绩
+  string rule = 4;// PK规则
+  uint64 creator = 5;// 发起者：user_id
+  string group_name = 6;// 我的队名
+  uint32 members = 7;// 我的队员人数
+  string background = 8; //背景图
+  uint64 create_by = 9; //发起人user_id
+}

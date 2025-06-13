@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pb;
+
+message EventMessageChatroomApplyHandle {
+    uint64 msg_id = 1;			//消息id
+    uint64 handled_by = 2;		//处理者
+    bool is_accept = 3;			//是否通过
+    uint64 request_id = 4; 		//请求事件的id
+}

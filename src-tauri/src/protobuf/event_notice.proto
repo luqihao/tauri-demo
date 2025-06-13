@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pb;
+
+message EventNotice {
+  uint64 id = 1;
+  string title = 2;
+  string content = 3;
+  bool is_dialog = 4;     // 是否弹窗：0 否 1 是
+  int64 send_at = 5;      // 发送时间
+  int64 invalid_at = 6;   // 失效时间
+  string staff_name = 7;
+  string entity_name = 8;
+}

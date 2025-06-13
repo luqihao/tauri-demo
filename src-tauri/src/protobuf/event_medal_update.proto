@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+message EventMedalUpdate {
+    uint64 id = 1; //medal id
+    string name = 2;
+    string icon = 3;
+    string image = 4;
+    bool is_default = 5; //是否默认
+}

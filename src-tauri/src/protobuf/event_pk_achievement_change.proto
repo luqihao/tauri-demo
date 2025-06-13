@@ -1,0 +1,24 @@
+syntax = "proto3";
+package pb;
+
+// 业绩PK结束后推送事件
+message EventPkAchievementChange {
+  uint64 chatroom_id = 1;// 群聊ID
+  uint64 pk_id = 2; // 业绩PK ID
+  int64 start_at = 3;// PK时间：起始时间13位时间戳
+  int64 end_at = 4;// PK时间：结束时间13位时间戳
+  uint32 method = 5;// PK维度：0总业绩，1新客户业绩
+  repeated Group groups = 6;// 队伍
+  ChangeType type = 7;
+
+  message Group {
+    uint64 id = 1;// 队伍ID
+    string group_name = 2;// 队名
+    uint32 rank = 3;// 队伍排行：1-1:平局 1-2:1胜利
+    float achievement = 4; // 业绩
+  }
+  enum ChangeType {
+    Change = 0;// 业绩变化
+    End = 1;// PK结束
+  }
+}

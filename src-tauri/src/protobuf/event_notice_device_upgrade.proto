@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pb;
+
+message EventNoticeDeviceUpgrade {
+  string env = 1;
+  string info = 2;
+}

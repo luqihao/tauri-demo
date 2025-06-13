@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+message EventCsStatOverviewChange {
+  uint32 work_cnt = 1; // 当前在线客服
+  uint32 serving_cnt = 2;// 当前总接待客户
+  uint32 waiting_cnt = 3;//  等待接待客户
+  string msg = 4; // 信息（无用字段）
+  repeated WorkCsItem work_cs = 5;// 在线客服列表
+  uint32 follow_order_cnt = 6; // 跟单中客户数量
+}
+
+message WorkCsItem {
+  uint64 user_id = 1;
+  string nickname = 2;
+  string account = 3;
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+package pb;
+
+// 消息投递
+message MessagePush {
+    repeated uint64 msg_ids = 1;   //消息id数组
+    repeated MessagePushItem messages = 2; // 消息列表
+}
+
+// 单条消息投递
+message MessagePushItem {
+    uint64 id = 1;           //消息id
+    int32 type = 2;         // 消息类型
+    string content = 3;     // 消息内容
+    uint64 from_id = 4;      // 发送者id
+    uint64 to_id = 5;        // 用户id或者群组id
+    bool is_room = 6;        // 接收者类型
+    int64 created_at = 7;   // 消息发送时间戳，精确到毫秒
+    string meta = 8; 		//消息额外信息
+    uint64 cancelled_by = 9;  //被谁撤回了
+    uint64 device_id = 10; 		//消息发送者的device_id
+}
+
+// 投递消息回执
+message MessagePushACK {
+	repeated uint64 msg_ids = 1;   //消息id数组
+}

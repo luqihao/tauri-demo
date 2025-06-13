@@ -1,0 +1,6 @@
+syntax = "proto3";
+package pb;
+
+message EventYbsNewTask {
+	uint64 total = 1; //总未读数
+}

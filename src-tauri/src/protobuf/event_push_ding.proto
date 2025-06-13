@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pb;
+
+message EventPushDing {
+    uint64 ding_id = 1; //ding_id
+    uint64 from_id = 2; //发送对象是谁
+    string content = 3; //内容
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+// 表情变更
+message EmojiUpdate {
+    uint64 id = 1;        //收藏表情列表id
+    string url = 2;       //表情url
+    string remark =3;     //表情备注
+    bool   is_delete = 4;
+}
