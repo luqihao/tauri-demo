@@ -8,6 +8,10 @@ interface ClipboardModuleProps {
 export const ClipboardModule: React.FC<ClipboardModuleProps> = () => {
     const [clipboardText, setClipboardText] = useState<string>('')
     const [textToCopy, setTextToCopy] = useState<string>('Hello, 这是一段测试文本！🚀')
+    const [isImageCopying, setIsImageCopying] = useState<boolean>(false)
+
+    // 示例图片链接
+    const sampleImageUrl = 'https://ydj-test-bucket.atido.com/desktop/1443/1749691692832/图片.png'
 
     async function copyToClipboard() {
         try {
@@ -18,6 +22,10 @@ export const ClipboardModule: React.FC<ClipboardModuleProps> = () => {
             console.error('复制到粘贴板失败:', error)
             alert('复制到粘贴板失败: ' + error)
         }
+    }
+
+    async function copyImageToClipboard() {
+        await clipboardAPI.writeImage(sampleImageUrl)
     }
 
     async function readFromClipboard() {
@@ -92,6 +100,69 @@ export const ClipboardModule: React.FC<ClipboardModuleProps> = () => {
                 >
                     复制到粘贴板
                 </button>
+
+                {/* 图片复制部分 */}
+                <div style={{ marginBottom: '12px' }}>
+                    <label
+                        style={{
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            color: '#374151',
+                            display: 'block',
+                            marginBottom: '4px'
+                        }}
+                    >
+                        复制示例图片:
+                    </label>
+                    <div
+                        style={{
+                            backgroundColor: '#f9fafb',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '4px',
+                            padding: '8px',
+                            marginBottom: '6px',
+                            fontSize: '11px',
+                            color: '#6b7280',
+                            wordBreak: 'break-all'
+                        }}
+                    >
+                        🖼️ {sampleImageUrl}
+                    </div>
+                    <img
+                        src={sampleImageUrl}
+                        alt="示例图片"
+                        style={{
+                            width: '100%',
+                            maxWidth: '200px',
+                            height: 'auto',
+                            borderRadius: '4px',
+                            border: '1px solid #e5e7eb',
+                            marginBottom: '6px',
+                            display: 'block'
+                        }}
+                        onError={e => {
+                            ;(e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                    />
+                    <button
+                        onClick={copyImageToClipboard}
+                        disabled={isImageCopying}
+                        style={{
+                            backgroundColor: isImageCopying ? '#9ca3af' : '#10b981',
+                            color: 'white',
+                            padding: '6px 12px',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: isImageCopying ? 'not-allowed' : 'pointer',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            width: '100%',
+                            marginBottom: '12px'
+                        }}
+                    >
+                        {isImageCopying ? '正在复制图片...' : '复制图片到粘贴板'}
+                    </button>
+                </div>
 
                 <label
                     style={{
