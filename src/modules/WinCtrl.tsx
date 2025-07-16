@@ -110,7 +110,7 @@ const WinCtrl: React.FC = () => {
 
     // 如果不是 Windows 平台，不渲染控制按钮
     if (!isWindows) {
-        return null
+        // return null
     }
     return (
         <>

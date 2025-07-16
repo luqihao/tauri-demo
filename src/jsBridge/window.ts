@@ -3,7 +3,8 @@
  * 提供窗口控制功能
  */
 
-import { getCurrentWebviewWindow, WebviewWindow, getAllWebviewWindows } from '@tauri-apps/api/webviewWindow'
+import { eventAPI } from './event'
+import { Window, getCurrentWindow, getAllWindows } from '@tauri-apps/api/window'
 
 // 窗口配置选项
 export interface WindowOptions {
@@ -27,7 +28,7 @@ export const WINDOWS = {
 
 export interface WindowAPI {
     /** 获取当前窗口 */
-    getCurrentWindow(): WebviewWindow
+    getCurrentWindow(): Window
     /** 最小化窗口 */
     minimize(): Promise<void>
     /** 最大化窗口 */
@@ -49,13 +50,13 @@ export interface WindowAPI {
     /** 获取窗口标签 */
     getLabel(): string
     /** 获取所有窗口 */
-    getAllWindows(): Promise<WebviewWindow[]>
+    getAllWindows(): Promise<Window[]>
     /** 创建新窗口 */
-    createWindow(label: string, options: WindowOptions): Promise<WebviewWindow>
+    createWindow(label: string, options: WindowOptions): Promise<Window>
     /** 打开或聚焦窗口 */
     openOrFocusWindow(label: string, title: string, url: string): Promise<void>
     /** 通过标签查找窗口 */
-    findWindowByLabel(label: string): Promise<WebviewWindow | null>
+    findWindowByLabel(label: string): Promise<Window | null>
     /** 关闭指定窗口 */
     closeWindowByLabel(label: string): Promise<void>
     /** 打开功能演示窗口 */
@@ -66,65 +67,65 @@ export interface WindowAPI {
 
 export const windowAPI: WindowAPI = {
     getCurrentWindow: () => {
-        return getCurrentWebviewWindow()
+        return getCurrentWindow()
     },
 
     minimize: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.minimize()
     },
 
     maximize: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.maximize()
     },
 
     unmaximize: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.unmaximize()
     },
 
     close: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.close()
     },
 
     hide: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.hide()
     },
 
     show: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.show()
     },
 
     isMaximized: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.isMaximized()
     },
 
     isMinimized: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.isMinimized()
     },
 
     isVisible: async () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return await window.isVisible()
     },
 
     getLabel: () => {
-        const window = getCurrentWebviewWindow()
+        const window = getCurrentWindow()
         return window.label
     },
 
     getAllWindows: async () => {
-        return await getAllWebviewWindows()
+        return await getAllWindows()
     },
 
     createWindow: async (label: string, options: WindowOptions) => {
-        const newWindow = new WebviewWindow(label, {
+        const newWindow = new Window(label, {
             title: options.title,
             url: options.url,
             width: options.width || 800,
@@ -152,7 +153,7 @@ export const windowAPI: WindowAPI = {
 
     findWindowByLabel: async (label: string) => {
         const allWindows = await getAllWebviewWindows()
-        return allWindows.find((w: WebviewWindow) => w.label === label) || null
+        return allWindows.find((w: Window) => w.label === label) || null
     },
 
     openOrFocusWindow: async (label: string, title: string, url: string) => {
@@ -170,13 +171,23 @@ export const windowAPI: WindowAPI = {
             }
         } else {
             // 如果窗口不存在，创建新窗口
-            await windowAPI.createWindow(label, {
+            const win = await windowAPI.createWindow(label, {
                 title,
                 url,
                 width: 800,
                 height: 600,
                 center: true,
                 resizable: true
+            })
+            win.listen('mounted', event => {
+                console.log(`窗口 ${title} mounted`)
+
+                if (label === WINDOWS.FEATURES) {
+                    eventAPI.unlisten({
+                        event: 'mounted',
+                        eventId: event.id
+                    })
+                }
             })
         }
     },

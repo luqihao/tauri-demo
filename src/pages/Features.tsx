@@ -12,8 +12,18 @@ import NotificationModule from '../modules/NotificationModule'
 import WinCtrl from '../modules/WinCtrl'
 import StateDemo from '../components/StateDemo'
 import reactLogo from '../assets/react.svg'
+import { useEffect } from 'react'
+import { listen } from '@tauri-apps/api/event'
 
 const Features = () => {
+    useEffect(() => {
+        listen('about-event', event => {
+            console.log('Received event in features page:', event.payload)
+        })
+        listen('custom-event', event => {
+            console.log('Received custom event in features page:', event.payload)
+        })
+    }, [])
     return (
         <main style={{ padding: '12px', margin: '0 auto', fontSize: '14px' }}>
             {/* 标题区域 */}

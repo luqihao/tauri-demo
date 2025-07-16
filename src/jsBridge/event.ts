@@ -3,6 +3,7 @@
  * 提供事件监听和发送功能
  */
 
+import { invoke } from '@tauri-apps/api/core'
 import { listen, emit } from '@tauri-apps/api/event'
 
 export type EventCallback<T = any> = (event: { payload: T }) => void
@@ -13,6 +14,8 @@ export interface EventAPI {
     listen<T = any>(event: string, handler: EventCallback<T>): Promise<UnlistenFn>
     /** 发送事件 */
     emit(event: string, payload?: any): Promise<void>
+    /** 取消监听事件 */
+    unlisten: ({ event, eventId }: { event: string; eventId: number }) => void
 }
 
 export const eventAPI: EventAPI = {
@@ -22,5 +25,12 @@ export const eventAPI: EventAPI = {
 
     emit: async (event: string, payload?: any) => {
         return await emit(event, payload)
+    },
+
+    unlisten: ({ event, eventId }: { event: string; eventId: number }) => {
+        invoke('plugin:event|unlisten', {
+            event,
+            eventId
+        })
     }
 }

@@ -32,7 +32,7 @@ pub fn configure_plugins(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<
             tauri_plugin_autostart::MacosLauncher::LaunchAgent, // macOS下使用LaunchAgent方式
             None,                                               // 不指定额外的启动参数
         ))
-        .plugin(tauri_plugin_window_state::Builder::new().build())
+        // .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_opener::init()) // 用于打开外部 URL
         .plugin(tauri_plugin_dialog::init()) // 用于显示文件对话框
         .plugin(tauri_plugin_clipboard_manager::init()) // 用于粘贴板操作
